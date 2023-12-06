@@ -14,8 +14,9 @@ type Adapter struct {
 }
 
 func (grpca Adapter) Add(ctx context.Context, parameters *pb.OperationParameters) (*pb.Answer, error) {
-	//TODO implement me
-	panic("implement me")
+	return &pb.Answer{
+		Value: grpca.api.GetAddition(int32(parameters.A), int32(parameters.B)),
+	}, nil
 }
 
 func (grpca Adapter) Subtract(ctx context.Context, parameters *pb.OperationParameters) (*pb.Answer, error) {
@@ -46,13 +47,16 @@ func NewAdapter(api ports.APIPort) *Adapter {
 
 func (grpca Adapter) Run() {
 	var err error
-	_, err = net.Listen("tcp", ":9000")
+	listen, err := net.Listen("tcp", ":9000")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
 	arithmeticService := grpca
 	grpcServer := grpc.NewServer()
-	pb.RegisterArithmeticServiceServer(grpcServer, &arithmeticService)
+	pb.RegisterArithmeticServiceServer(grpcServer, arithmeticService)
+	if err := grpcServer.Serve(listen); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 
 }
