@@ -36,7 +36,7 @@ func (da Adapter) CloseDBConnection() {
 	log.Println("database connection closed")
 }
 
-func (da Adapter) AddToHistory(answer int32, operation string) {
+func (da Adapter) AddToHistory(answer int32, operation string) error {
 	stmt, err := da.db.Prepare("INSERT INTO history (data, answer, opration) VALUES (?,?,?)")
 	if err != nil {
 		log.Fatalf("could not prepare the statement: %v", err)
@@ -45,7 +45,7 @@ func (da Adapter) AddToHistory(answer int32, operation string) {
 
 	result, err := stmt.Exec(time.Now(), answer, operation)
 	if err != nil {
-		return
+		return err
 	}
 	log.Println("history record added")
 
@@ -83,4 +83,5 @@ func (da Adapter) AddToHistory(answer int32, operation string) {
 	//    // Handle the error
 	//    log.Fatal(err)
 	//}
+	return nil
 }

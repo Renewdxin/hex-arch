@@ -1,4 +1,4 @@
-package proto
+package grpc
 
 import (
 	"context"
@@ -14,29 +14,35 @@ type Adapter struct {
 }
 
 func (grpca Adapter) Add(ctx context.Context, parameters *pb.OperationParameters) (*pb.Answer, error) {
+	value, _ := grpca.api.GetAddition(parameters.A, parameters.B)
 	return &pb.Answer{
-		Value: grpca.api.GetAddition(int32(parameters.A), int32(parameters.B)),
+		Value: value,
 	}, nil
 }
 
 func (grpca Adapter) Subtract(ctx context.Context, parameters *pb.OperationParameters) (*pb.Answer, error) {
-	//TODO implement me
-	panic("implement me")
+	value, _ := grpca.api.GetSubtraction(parameters.A, parameters.B)
+	return &pb.Answer{
+		Value: value,
+	}, nil
 }
 
 func (grpca Adapter) Multiply(ctx context.Context, parameters *pb.OperationParameters) (*pb.Answer, error) {
-	//TODO implement me
-	panic("implement me")
+	value, _ := grpca.api.GetMultiplication(parameters.A, parameters.B)
+	return &pb.Answer{
+		Value: value,
+	}, nil
 }
 
 func (grpca Adapter) Divide(ctx context.Context, parameters *pb.OperationParameters) (*pb.Answer, error) {
-	//TODO implement me
-	panic("implement me")
+	value, _ := grpca.api.GetDivision(parameters.A, parameters.B)
+	return &pb.Answer{
+		Value: value,
+	}, nil
 }
 
 func (grpca Adapter) mustEmbedUnimplementedArithmeticServiceServer() {
-	//TODO implement me
-	panic("implement me")
+
 }
 
 func NewAdapter(api ports.APIPort) *Adapter {

@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	grpc2 "hex-arch/internal/adapters/framework/left/grpc"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -115,7 +116,7 @@ type UnsafeArithmeticServiceServer interface {
 	mustEmbedUnimplementedArithmeticServiceServer()
 }
 
-func RegisterArithmeticServiceServer(s grpc.ServiceRegistrar, srv ArithmeticServiceServer) {
+func RegisterArithmeticServiceServer(s grpc.ServiceRegistrar, srv grpc2.Adapter) {
 	s.RegisterService(&ArithmeticService_ServiceDesc, srv)
 }
 
