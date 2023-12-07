@@ -10,8 +10,8 @@ type Adapter struct {
 
 func NewAdapter(db ports.DBPort, arith ports.ArithmeticPort) *Adapter {
 	return &Adapter{
-		arith: arith,
 		db:    db,
+		arith: arith,
 	}
 }
 
