@@ -8,7 +8,7 @@ type Adapter struct {
 	db    ports.DBPort
 }
 
-func NewAdapter(arith ports.ArithmeticPort, db ports.DBPort) *Adapter {
+func NewAdapter(db ports.DBPort, arith ports.ArithmeticPort) *Adapter {
 	return &Adapter{
 		arith: arith,
 		db:    db,

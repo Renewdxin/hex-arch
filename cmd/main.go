@@ -6,21 +6,18 @@ import (
 	"hex-arch/internal/adapters/core/arithmetic"
 	"hex-arch/internal/adapters/framework/left/grpc"
 	"hex-arch/internal/adapters/framework/right/db"
-	"hex-arch/internal/ports"
 )
 
 func main() {
-	var core ports.ArithmeticPort
-	var err error
-	var dbaseAdapter ports.DBPort
-	var arithAdapter ports.ArithmeticPort
-	var appAdapter ports.APIPort
-	var grpcAdapter ports.GRPCPort
+	dbaseAdapter, err := db.NewAdapter("mysql", "admin:password")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer dbaseAdapter.CloseDBConnection()
 
-	dbaseAdapter, err = db.NewAdapter("mysql", "admin:password")
-	arithAdapter = arithmetic.NewAdapter()
-	appAdapter = api.NewAdapter(arithAdapter, dbaseAdapter)
-	grpcAdapter = grpc.NewAdapter(appAdapter)
+	core := arithmetic.NewAdapter()
+	applicationAPI := api.NewAdapter(dbaseAdapter, core)
+	grpcAdapter := grpc.NewAdapter(applicationAPI)
 	grpcAdapter.Run()
 
 	core = arithmetic.NewAdapter()
